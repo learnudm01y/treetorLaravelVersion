@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply relative text-base font-normal z-1 bg-gray-50 font-outfit;
+    }
+}
+
+@layer components {
+    /* Menu Items */
+    .menu-item {
+        @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
+    }
+    .menu-item-active {
+        @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+    }
+    .menu-item-inactive {
+        @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+    }
+    .menu-item-icon {
+        @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400;
+    }
+    .menu-item-icon-active {
+        @apply text-brand-500 dark:text-brand-400;
+    }
+    .menu-item-icon-size svg {
+        @apply size-6 !important;
+    }
+    .menu-item-icon-inactive {
+        @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+    }
+    .menu-item-text {
+        @apply whitespace-nowrap;
+    }
+
+    /* Menu Arrows */
+    .menu-item-arrow {
+        @apply relative;
+    }
+    .menu-item-arrow-active {
+        @apply rotate-180 text-brand-500 dark:text-brand-400;
+    }
+    .menu-item-arrow-inactive {
+        @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+    }
+
+    /* Dropdown Menu Items */
+    .menu-dropdown-item {
+        @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium;
+    }
+    .menu-dropdown-item-active {
+        @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+    }
+    .menu-dropdown-item-inactive {
+        @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5;
+    }
+
+    /* Dropdown Badges */
+    .menu-dropdown-badge {
+        @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase text-brand-500 dark:text-brand-400;
+    }
+    .menu-dropdown-badge-active {
+        @apply bg-brand-100 dark:bg-brand-500/20;
+    }
+    .menu-dropdown-badge-inactive {
+        @apply bg-brand-50 group-hover:bg-brand-100 dark:bg-brand-500/15 dark:group-hover:bg-brand-500/20;
+    }
+
+    /* Shadow Theme */
+    .shadow-theme-xs {
+        box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    }
+    .shadow-theme-sm {
+        box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.1);
+    }
+    .shadow-theme-md {
+        box-shadow: 0px 2px 4px -2px rgba(16, 24, 40, 0.06), 0px 4px 8px -2px rgba(16, 24, 40, 0.1);
+    }
+    .shadow-theme-lg {
+        box-shadow: 0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08);
+    }
+    .shadow-theme-xl {
+        box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08);
+    }
+}
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    /* Custom Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+        @apply size-1.5;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        @apply rounded-full;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-gray-200 rounded-full dark:bg-gray-700;
+    }
+
+    /* Remove Date Icon */
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="time"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+    }
+}
+
+/* Z-Index */
+.z-1 {
+    z-index: 1;
+}
+
+.z-99999 {
+    z-index: 99999;
+}
+
+/* Font Family */
+.font-outfit {
+    font-family: "Outfit", sans-serif;
+}

@@ -1,0 +1,5 @@
+<svg width="80" height="50" xmlns="http://www.w3.org/2000/svg">
+  <rect width="80" height="50" rx="5" fill="#00457C"/>
+  <text x="40" y="18" font-family="Arial" font-size="10" font-weight="bold" fill="white" text-anchor="middle">American</text>
+  <text x="40" y="32" font-family="Arial" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Express</text>
+</svg>

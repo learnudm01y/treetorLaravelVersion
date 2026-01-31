@@ -1,0 +1,46 @@
+/* Fix for social media icons - use Font Awesome Brands */
+.footer-top__social .icon-facebook:before,
+.footer-top__social .icon-twitter:before,
+.footer-top__social .icon-insta:before,
+.footer-top__social .icon-in:before {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+.insta-photo__hover .icon-insta:before {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+/* Ensure icons display correctly */
+.footer-top__social i,
+.insta-photo__hover i {
+    font-style: normal;
+    display: inline-block;
+}
+
+/* Icon sizes */
+.footer-top__social i {
+    font-size: 18px;
+}
+
+.insta-photo__hover i {
+    font-size: 32px;
+}
+
+/* Social icon colors on hover */
+.footer-top__social a:hover .icon-facebook:before {
+    color: #1877f2 !important;
+}
+
+.footer-top__social a:hover .icon-twitter:before {
+    color: #1da1f2 !important;
+}
+
+.footer-top__social a:hover .icon-insta:before {
+    color: #e4405f !important;
+}
+
+.footer-top__social a:hover .icon-in:before {
+    color: #0077b5 !important;
+}
