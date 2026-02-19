@@ -4267,12 +4267,14 @@ h6,
 }
 
 .blog-item__img {
-	height: 300px;
+	width: 100%;
+	aspect-ratio: 2/1;
 	position: relative;
 	display: block;
 	-webkit-transition: all 0.3s linear;
 	-o-transition: all 0.3s linear;
 	transition: all 0.3s linear;
+	overflow: hidden;
 }
 
 .blog-item__img img {
