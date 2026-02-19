@@ -3679,10 +3679,9 @@ h6,
 	margin-bottom: 55px;
 	position: relative;
 	display: inline-block;
-	isolation: isolate;
 }
 
-.advantages-item__icon::before {
+.advantages-item__icon .icon-bg {
 	content: "";
 	position: absolute;
 	left: 50%;
@@ -3702,6 +3701,7 @@ h6,
 	transition: all 0.3s linear;
 	z-index: 0;
 	pointer-events: none;
+	display: block;
 }
 
 .advantages-item__icon i {

@@ -97,35 +97,40 @@
         <div class="advantages-items">
             <div class="advantages-item">
                 <div class="advantages-item__icon">
-                    <i class="fas fa-award"></i>
+                    <span class="icon-bg"></span>
+                    <i class="fas fa-award" style="color: #90EE90 !important;"></i>
                 </div>
                 <h4>Equipment, Product & Procurement Optimization</h4>
                 <p>Goal: Premium quality at optimized cost.</p>
             </div>
             <div class="advantages-item">
                 <div class="advantages-item__icon">
-                    <i class="fas fa-star"></i>
+                    <span class="icon-bg"></span>
+                    <i class="fas fa-star" style="color: #90EE90 !important;"></i>
                 </div>
                 <h4>Service Menu & Pricing Strategy</h4>
                 <p>Goal: Attract and retain clients while maximizing profits.</p>
             </div>
             <div class="advantages-item">
                 <div class="advantages-item__icon">
-                    <i class="far fa-heart"></i>
+                    <span class="icon-bg"></span>
+                    <i class="far fa-heart" style="color: #90EE90 !important;"></i>
                 </div>
                 <h4>Branding & Interior Advisory</h4>
                 <p>Goal: Build a brand clients love and a space that works.</p>
             </div>
             <div class="advantages-item">
                 <div class="advantages-item__icon">
-                    <i class="fas fa-seedling"></i>
+                    <span class="icon-bg"></span>
+                    <i class="fas fa-seedling" style="color: #90EE90 !important;"></i>
                 </div>
                 <h4>Financial Oversight & Budget Optimization</h4>
                 <p>Goal: Strengthen financial performance.</p>
             </div>
             <div class="advantages-item">
                 <div class="advantages-item__icon">
-                    <i class="far fa-user"></i>
+                    <span class="icon-bg"></span>
+                    <i class="far fa-user" style="color: #90EE90 !important;"></i>
                 </div>
                 <h4>HR Support & Talent Acquisition</h4>
                 <p>Goal: Hire, train, and retain the right team.</p>

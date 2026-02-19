@@ -3679,10 +3679,9 @@ h6,
 	margin-bottom: 55px;
 	position: relative;
 	display: inline-block;
-	isolation: isolate;
 }
 
-.advantages-item__icon::before {
+.advantages-item__icon .icon-bg {
 	content: "";
 	position: absolute;
 	left: 50%;
@@ -3702,25 +3701,26 @@ h6,
 	transition: all 0.3s linear;
 	z-index: 0;
 	pointer-events: none;
+	display: block;
 }
 
 .advantages-item__icon i {
 	position: relative;
 	font-size: 70px;
-	color: #6dbc6d !important;
+	color: #90EE90 !important;
 	z-index: 10;
 	display: inline-block;
 }
 
 .advantages-item__icon i::before {
-	color: #6dbc6d !important;
+	color: #90EE90 !important;
 }
 
 .advantages-item__icon .fas,
 .advantages-item__icon .far,
 .advantages-item__icon .fab,
 .advantages-item__icon .fa {
-	color: #6dbc6d !important;
+	color: #90EE90 !important;
 }
 
 .advantages-item h4 {
