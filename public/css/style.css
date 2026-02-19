@@ -3718,20 +3718,20 @@ h6,
 .advantages-item__icon i {
 	position: relative;
 	font-size: 70px;
-	color: #6dbc6d !important;
+	color: #90EE90 !important;
 	z-index: 10;
 	display: inline-block;
 }
 
 .advantages-item__icon i::before {
-	color: #6dbc6d !important;
+	color: #90EE90 !important;
 }
 
 .advantages-item__icon .fas,
 .advantages-item__icon .far,
 .advantages-item__icon .fab,
 .advantages-item__icon .fa {
-	color: #6dbc6d !important;
+	color: #90EE90 !important;
 }
 
 .advantages-item h4 {
@@ -10835,10 +10835,6 @@ input[type="search"]::-webkit-search-results-decoration {
 		width: 100%;
 		margin: 0 0 40px 0;
 	}
-}
-
-.advantages-item__icon i {
-	color: #222222;
 }
 
 /* Animated Image in Main Block */

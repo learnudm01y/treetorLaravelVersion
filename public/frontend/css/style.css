@@ -10960,10 +10960,6 @@ input[type="search"]::-webkit-search-results-decoration {
 	}
 }
 
-.advantages-item__icon i {
-	color: #222222;
-}
-
 /* Animated Image in Main Block */
 .main-block__animated-image {
 	position: absolute;
