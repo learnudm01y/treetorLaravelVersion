@@ -137,21 +137,24 @@
             </div>
             <div class="advantages-item">
                 <div class="advantages-item__icon">
-                    <i class="fas fa-phone-volume"></i>
+                    <span class="icon-bg"></span>
+                    <i class="fas fa-phone-volume" style="color: #90EE90 !important;"></i>
                 </div>
                 <h4>Staff Training & Development</h4>
                 <p>Goal: Equip your team with skills to deliver excellence.</p>
             </div>
             <div class="advantages-item">
                 <div class="advantages-item__icon">
-                    <i class="fas fa-clipboard"></i>
+                    <span class="icon-bg"></span>
+                    <i class="fas fa-clipboard" style="color: #90EE90 !important;"></i>
                 </div>
                 <h4>Operational Reporting & Team Goal Alignment</h4>
                 <p>Goal: Drive accountability and continuous growth.</p>
             </div>
             <div class="advantages-item">
                 <div class="advantages-item__icon">
-                    <i class="fas fa-leaf"></i>
+                    <span class="icon-bg"></span>
+                    <i class="fas fa-leaf" style="color: #90EE90 !important;"></i>
                 </div>
                 <h4>Business Structuring & Systemization</h4>
                 <p>Goal: Build a salon that runs smoothly — with or without you.</p>
