@@ -65,21 +65,21 @@
         <div class="special-offer__container">
             <div class="special-offer__item">
                 <div class="special-offer__icon">🕐</div>
-                <div class="special-offer__duration">1 Hour</div>
-                <div class="special-offer__price-old">4 500 ₽</div>
-                <div class="special-offer__price-new">3 900 ₽</div>
+                <div class="special-offer__duration" style="font-style: italic !important;">1.5 Hours</div>
+                <div class="special-offer__price-old" style="font-style: italic !important;">3 000 AED</div>
+                <div class="special-offer__price-new" style="font-style: italic !important;">2 000 AED</div>
             </div>
             <div class="special-offer__separator"></div>
             <div class="special-offer__item">
                 <div class="special-offer__icon">🕐</div>
-                <div class="special-offer__duration">1.5 Hours</div>
-                <div class="special-offer__price-old">6 900 ₽</div>
-                <div class="special-offer__price-new">5 200 ₽</div>
+                <div class="special-offer__duration" style="font-style: italic !important;">2.5 Hours</div>
+                <div class="special-offer__price-old" style="font-style: italic !important;">5 000 AED</div>
+                <div class="special-offer__price-new" style="font-style: italic !important;">2 500 AED</div>
             </div>
             <div class="special-offer__separator"></div>
             <div class="special-offer__item special-offer__item--cta">
-                <a href="https://wa.me/971586658664" class="btn-book">Book Online</a>
-                <p class="special-offer__note">When booking, mention that you are a new client and get the promotional price!</p>
+                <a href="https://wa.me/971522243390" class="btn-book">Book Online</a>
+                <p class="special-offer__note" style="font-style: italic !important;">When booking, mention that you are a new client and get the promotional price!</p>
             </div>
         </div>
     </div>
@@ -160,19 +160,7 @@
 <div class="clients-slider-section">
     <div class="clients-slider js-clients-slider">
         <div class="client-slide">
-            <img src="{{ asset('img/55.png') }}" alt="Client Logo">
-        </div>
-        <div class="client-slide">
-            <img src="{{ asset('img/44.png') }}" alt="Client Logo">
-        </div>
-        <div class="client-slide">
-            <img src="{{ asset('img/33.png') }}" alt="Client Logo">
-        </div>
-        <div class="client-slide">
-            <img src="{{ asset('img/22.png') }}" alt="Client Logo">
-        </div>
-        <div class="client-slide">
-            <img src="{{ asset('img/11.png') }}" alt="Client Logo">
+            <img src="{{ asset('img/diamondSalons.jpg') }}" alt="Diamond Salons">
         </div>
         <div class="client-slide">
             <img src="{{ asset('img/55.png') }}" alt="Client Logo">
@@ -188,6 +176,18 @@
         </div>
         <div class="client-slide">
             <img src="{{ asset('img/11.png') }}" alt="Client Logo">
+        </div>
+        <div class="client-slide">
+            <img src="{{ asset('img/diamondSalons.jpg') }}" alt="Diamond Salons">
+        </div>
+        <div class="client-slide">
+            <img src="{{ asset('img/55.png') }}" alt="Client Logo">
+        </div>
+        <div class="client-slide">
+            <img src="{{ asset('img/44.png') }}" alt="Client Logo">
+        </div>
+        <div class="client-slide">
+            <img src="{{ asset('img/33.png') }}" alt="Client Logo">
         </div>
     </div>
 </div>
@@ -267,7 +267,7 @@
     <div class="wrapper">
         <div class="subscribe-form">
             <div class="subscribe-form__img">
-                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=300&fit=crop" alt="Newsletter">
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300&h=400&fit=crop" alt="Beauty Contact">
             </div>
             <form>
                 <h3>Stay in touch</h3>

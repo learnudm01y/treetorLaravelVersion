@@ -3677,14 +3677,12 @@ h6,
 
 .advantages-item__icon {
 	margin-bottom: 55px;
-}
-
-.advantages-item__icon i {
 	position: relative;
-	font-size: 70px;
+	display: inline-block;
+	isolation: isolate;
 }
 
-.advantages-item__icon i:after {
+.advantages-item__icon::before {
 	content: "";
 	position: absolute;
 	left: 50%;
@@ -3702,6 +3700,27 @@ h6,
 	-webkit-transition: all 0.3s linear;
 	-o-transition: all 0.3s linear;
 	transition: all 0.3s linear;
+	z-index: 0;
+	pointer-events: none;
+}
+
+.advantages-item__icon i {
+	position: relative;
+	font-size: 70px;
+	color: #6dbc6d !important;
+	z-index: 10;
+	display: inline-block;
+}
+
+.advantages-item__icon i::before {
+	color: #6dbc6d !important;
+}
+
+.advantages-item__icon .fas,
+.advantages-item__icon .far,
+.advantages-item__icon .fab,
+.advantages-item__icon .fa {
+	color: #6dbc6d !important;
 }
 
 .advantages-item h4 {

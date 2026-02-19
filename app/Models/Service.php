@@ -82,9 +82,9 @@ class Service extends Model
         } elseif ($this->price_type === 'custom') {
             return 'Custom Pricing';
         } elseif ($this->price_type === 'from') {
-            return 'From $' . number_format($this->price, 2);
+            return 'From ' . number_format($this->price, 2) . ' AED';
         } else {
-            return '$' . number_format($this->price, 2);
+            return number_format($this->price, 2) . ' AED';
         }
     }
 
