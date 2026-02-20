@@ -209,18 +209,10 @@
                         </div>
                     </div>
 
-                    <div class="flex gap-3">
-                        <button type="submit"
-                                class="flex-1 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 transition-all">
-                            💾 Create
-                        </button>
-                        <button type="submit"
-                                name="save_as"
-                                value="draft"
-                                class="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
-                            📝 Draft
-                        </button>
-                    </div>
+                    <button type="submit"
+                            class="w-full rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                        Save
+                    </button>
                 </div>
             </div>
         </div>

@@ -233,8 +233,8 @@
                     </div>
 
                     <button type="submit"
-                            class="w-full rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 transition-all">
-                        ✅ Update Article
+                            class="w-full rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                        Save
                     </button>
                 </div>
             </div>

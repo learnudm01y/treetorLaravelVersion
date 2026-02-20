@@ -621,16 +621,10 @@
                                class="w-full rounded-lg border border-gray-200 bg-transparent px-4 py-2.5 text-gray-800 dark:border-gray-800 dark:bg-gray-900 dark:text-white/90">
                     </div>
 
-                    <div class="flex gap-3">
-                        <button type="submit" name="status" value="draft"
-                                class="flex-1 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                            Save Draft
-                        </button>
-                        <button type="submit"
-                                class="flex-1 rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600">
-                            Publish
-                        </button>
-                    </div>
+                    <button type="submit"
+                            class="w-full rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600">
+                        Save
+                    </button>
                 </div>
             </div>
         </div>
