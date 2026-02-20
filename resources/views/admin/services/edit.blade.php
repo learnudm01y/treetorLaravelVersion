@@ -124,343 +124,284 @@
                     </div>
                 </div>
 
-                {{-- Features Section --}}
-                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 mb-6"
+                {{-- Dynamic Sections --}}
+                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900" style="margin-top: 26px;"
                      x-data="{
-                         features: {{ json_encode(old('features', (is_array($service->features) && count($service->features) > 0) ? $service->features : [])) }},
-                         addFeature() {
-                             this.features.push({ icon: '', title: '', description: '' });
+                         sections: {{ json_encode(old('sections', $service->sections->map(function($s) {
+                             return [
+                                 'title' => $s->title,
+                                 'icon' => $s->icon,
+                                 'type' => $s->type,
+                                 'items' => $s->items ?? [],
+                                 'content' => $s->content,
+                                 'sort_order' => $s->sort_order,
+                                 'is_active' => $s->is_active
+                             ];
+                         })->toArray())) }},
+                         addSection() {
+                             this.sections.push({
+                                 title: '',
+                                 icon: 'fas fa-layer-group',
+                                 type: 'list',
+                                 items: [],
+                                 content: '',
+                                 sort_order: this.sections.length,
+                                 is_active: true
+                             });
                          },
-                         confirmRemoveFeature(index) {
+                         removeSection(index) {
                              const self = this;
                              Swal.fire({
-                                 title: 'Remove Feature?',
-                                 text: 'Are you sure you want to remove this feature from the database?',
+                                 title: 'Delete Section?',
+                                 text: 'Are you sure you want to delete this entire section?',
                                  icon: 'warning',
                                  showCancelButton: true,
                                  confirmButtonColor: '#dc2626',
                                  cancelButtonColor: '#6b7280',
-                                 confirmButtonText: 'Yes, Remove',
+                                 confirmButtonText: 'Yes, Delete',
                                  cancelButtonText: 'Cancel'
                              }).then((result) => {
                                  if (result.isConfirmed) {
-                                     fetch('{{ route('admin.services.remove-feature', $service) }}', {
-                                         method: 'DELETE',
-                                         headers: {
-                                             'Content-Type': 'application/json',
-                                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                             'Accept': 'application/json'
-                                         },
-                                         body: JSON.stringify({ index: index })
-                                     })
-                                     .then(response => response.json())
-                                     .then(data => {
-                                         if (data.success) {
-                                             self.features.splice(index, 1);
-                                             Swal.fire({
-                                                 title: 'Deleted!',
-                                                 text: data.message,
-                                                 icon: 'success',
-                                                 timer: 1500,
-                                                 showConfirmButton: false
-                                             });
-                                         } else {
-                                             Swal.fire('Error', data.message, 'error');
-                                         }
-                                     })
-                                     .catch(error => {
-                                         console.error('Error:', error);
-                                         Swal.fire('Error', 'Failed to remove feature.', 'error');
-                                     });
+                                     self.sections.splice(index, 1);
                                  }
                              });
                          },
-                         openIconPickerFor(index) {
+                         addSectionItem(sectionIndex) {
+                             if (!this.sections[sectionIndex].items) {
+                                 this.sections[sectionIndex].items = [];
+                             }
+                             this.sections[sectionIndex].items.push({ icon: 'fas fa-check', title: '', description: '' });
+                         },
+                         removeSectionItem(sectionIndex, itemIndex) {
+                             this.sections[sectionIndex].items.splice(itemIndex, 1);
+                         },
+                         openIconPickerForSection(sectionIndex) {
                              const self = this;
-                             window.openIconPicker(this.features[index].icon, function(icon) {
-                                 self.features[index].icon = icon;
+                             window.openIconPicker(this.sections[sectionIndex].icon, function(icon) {
+                                 self.sections[sectionIndex].icon = icon;
                              });
+                         },
+                         openIconPickerForItem(sectionIndex, itemIndex) {
+                             const self = this;
+                             window.openIconPicker(this.sections[sectionIndex].items[itemIndex].icon, function(icon) {
+                                 self.sections[sectionIndex].items[itemIndex].icon = icon;
+                             });
+                         },
+                         moveSectionUp(index) {
+                             if (index > 0) {
+                                 [this.sections[index], this.sections[index - 1]] = [this.sections[index - 1], this.sections[index]];
+                             }
+                         },
+                         moveSectionDown(index) {
+                             if (index < this.sections.length - 1) {
+                                 [this.sections[index], this.sections[index + 1]] = [this.sections[index + 1], this.sections[index]];
+                             }
                          }
                      }">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-800 dark:text-white/90">Features</h3>
-                        <button type="button" @click="addFeature()"
-                                class="inline-flex items-center gap-1 text-sm text-brand-500 hover:text-brand-600">
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-800 dark:text-white/90">Dynamic Sections</h3>
+                            <p class="text-xs text-gray-500 mt-1">Add unlimited custom sections to display additional information</p>
+                        </div>
+                        <button type="button" @click="addSection()"
+                                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 5v14M5 12h14"/>
                             </svg>
-                            Add Feature
+                            Add New Section
                         </button>
                     </div>
 
-                    <template x-for="(feature, index) in features" :key="index">
-                        <div class="mb-4 p-4 border border-gray-100 rounded-lg dark:border-gray-800">
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-sm font-medium text-gray-600 dark:text-gray-400" x-text="'Feature ' + (index + 1)"></span>
-                                <button type="button" @click="confirmRemoveFeature(index)"
-                                        class="text-red-500 hover:text-red-600">
-                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <template x-for="(section, sectionIndex) in sections" :key="sectionIndex">
+                        <div class="mb-6 p-6 border-2 border-brand-200 rounded-xl dark:border-brand-800 bg-brand-50/30 dark:bg-brand-900/10">
+                            {{-- Section Header --}}
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex flex-col gap-1">
+                                        <button type="button" @click="moveSectionUp(sectionIndex)"
+                                                :disabled="sectionIndex === 0"
+                                                class="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30">
+                                            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="m18 15-6-6-6 6"/>
+                                            </svg>
+                                        </button>
+                                        <button type="button" @click="moveSectionDown(sectionIndex)"
+                                                :disabled="sectionIndex === sections.length - 1"
+                                                class="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30">
+                                            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="m6 9 6 6 6-6"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <span class="text-lg font-semibold text-brand-600 dark:text-brand-400" x-text="'Section ' + (sectionIndex + 1)"></span>
+                                </div>
+                                <button type="button" @click="removeSection(sectionIndex)"
+                                        class="px-3 py-1.5 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg">
+                                    <svg class="w-4 h-4 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M18 6L6 18M6 6l12 12"/>
                                     </svg>
+                                    Delete Section
                                 </button>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+                            {{-- Section Basic Info --}}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                {{-- Section Title --}}
                                 <div>
-                                    <label class="block text-xs text-gray-500 mb-1">Icon</label>
-                                    <input type="hidden" :name="'features[' + index + '][icon]'" x-model="feature.icon">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Section Title *</label>
+                                    <input type="text"
+                                           :name="'sections[' + sectionIndex + '][title]'"
+                                           x-model="section.title"
+                                           placeholder="e.g., Work Process"
+                                           class="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white/90">
+                                </div>
+
+                                {{-- Section Icon --}}
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Section Icon</label>
+                                    <input type="hidden" :name="'sections[' + sectionIndex + '][icon]'" x-model="section.icon">
                                     <button type="button"
-                                            @click="openIconPickerFor(index)"
-                                            class="w-full flex items-center gap-3 rounded-lg border border-gray-200 bg-transparent px-4 py-2.5 text-left text-gray-800 hover:border-brand-300 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:text-white/90 transition-colors">
-                                        <div class="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/20 flex items-center justify-center flex-shrink-0">
-                                            <i x-show="feature.icon" :class="feature.icon" class="text-lg text-brand-500"></i>
-                                            <svg x-show="!feature.icon" class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <rect x="3" y="3" width="7" height="7"></rect>
-                                                <rect x="14" y="3" width="7" height="7"></rect>
-                                                <rect x="14" y="14" width="7" height="7"></rect>
-                                                <rect x="3" y="14" width="7" height="7"></rect>
-                                            </svg>
+                                            @click="openIconPickerForSection(sectionIndex)"
+                                            class="w-full flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-3 py-2 text-left text-gray-800 hover:border-brand-300 focus:border-brand-300 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white/90">
+                                        <div class="w-9 h-9 rounded-lg bg-brand-500/10 flex items-center justify-center flex-shrink-0">
+                                            <i :class="section.icon" class="text-lg text-brand-500"></i>
                                         </div>
-                                        <span x-show="feature.icon" x-text="feature.icon" class="text-xs font-mono text-gray-500 truncate"></span>
-                                        <span x-show="!feature.icon" class="text-gray-400 text-sm">Choose icon...</span>
+                                        <span x-text="section.icon" class="text-xs font-mono text-gray-500 truncate"></span>
                                     </button>
                                 </div>
-                                <div>
-                                    <label class="block text-xs text-gray-500 mb-1">Title</label>
-                                    <input type="text" :name="'features[' + index + '][title]'" x-model="feature.title" placeholder="Feature Title" class="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-white/90">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-gray-500 mb-1">Description</label>
-                                    <input type="text" :name="'features[' + index + '][description]'" x-model="feature.description" placeholder="Description" class="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-white/90">
+                            </div>
+
+                            {{-- Section Type --}}
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Display Type</label>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <label class="relative flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer"
+                                           :class="section.type === 'list' ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20' : 'border-gray-200 dark:border-gray-700'">
+                                        <input type="radio" :name="'sections[' + sectionIndex + '][type]'" value="list"
+                                               x-model="section.type" class="text-brand-500 focus:ring-brand-500">
+                                        <div>
+                                            <div class="font-medium text-sm">List</div>
+                                            <div class="text-xs text-gray-500">Sequential items</div>
+                                        </div>
+                                    </label>
+                                    <label class="relative flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer"
+                                           :class="section.type === 'grid' ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20' : 'border-gray-200 dark:border-gray-700'">
+                                        <input type="radio" :name="'sections[' + sectionIndex + '][type]'" value="grid"
+                                               x-model="section.type" class="text-brand-500 focus:ring-brand-500">
+                                        <div>
+                                            <div class="font-medium text-sm">Grid</div>
+                                            <div class="text-xs text-gray-500">Card display</div>
+                                        </div>
+                                    </label>
+                                    <label class="relative flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer"
+                                           :class="section.type === 'text' ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/20' : 'border-gray-200 dark:border-gray-700'">
+                                        <input type="radio" :name="'sections[' + sectionIndex + '][type]'" value="text"
+                                               x-model="section.type" class="text-brand-500 focus:ring-brand-500">
+                                        <div>
+                                            <div class="font-medium text-sm">Text</div>
+                                            <div class="text-xs text-gray-500">Text content</div>
+                                        </div>
+                                    </label>
                                 </div>
                             </div>
+
+                            {{-- Section Content (for list/grid type) --}}
+                            <div x-show="section.type !== 'text'" class="mb-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Section Items</label>
+                                    <button type="button" @click="addSectionItem(sectionIndex)"
+                                            class="inline-flex items-center gap-1 text-xs text-brand-500 hover:text-brand-600">
+                                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 5v14M5 12h14"/>
+                                        </svg>
+                                        Add Item
+                                    </button>
+                                </div>
+
+                                <template x-for="(item, itemIndex) in section.items" :key="itemIndex">
+                                    <div class="mb-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-xs text-gray-500" x-text="'Item ' + (itemIndex + 1)"></span>
+                                            <button type="button" @click="removeSectionItem(sectionIndex, itemIndex)"
+                                                    class="text-red-500 hover:text-red-600 p-1">
+                                                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M18 6L6 18M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="flex flex-col gap-2">
+                                            {{-- Item Icon --}}
+                                            <div>
+                                                <label class="block text-xs text-gray-500 mb-1">Icon</label>
+                                                <input type="hidden" :name="'sections[' + sectionIndex + '][items][' + itemIndex + '][icon]'" x-model="item.icon">
+                                                <button type="button"
+                                                        @click="openIconPickerForItem(sectionIndex, itemIndex)"
+                                                        class="w-full flex items-center gap-2 rounded border border-gray-200 bg-white px-2.5 py-2 text-left hover:border-brand-300 dark:border-gray-700 dark:bg-gray-800">
+                                                    <div class="w-7 h-7 rounded bg-brand-50 dark:bg-brand-900/20 flex items-center justify-center flex-shrink-0">
+                                                        <i :class="item.icon" class="text-sm text-brand-500"></i>
+                                                    </div>
+                                                    <span x-text="item.icon" class="text-xs font-mono text-gray-500 truncate"></span>
+                                                </button>
+                                            </div>
+                                            {{-- Item Title --}}
+                                            <div>
+                                                <label class="block text-xs text-gray-500 mb-1">Title</label>
+                                                <input type="text"
+                                                       :name="'sections[' + sectionIndex + '][items][' + itemIndex + '][title]'"
+                                                       x-model="item.title"
+                                                       placeholder="Item title"
+                                                       class="w-full rounded border border-gray-200 bg-white px-2.5 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                            </div>
+                                            {{-- Item Description --}}
+                                            <div>
+                                                <label class="block text-xs text-gray-500 mb-1">Description</label>
+                                                <input type="text"
+                                                       :name="'sections[' + sectionIndex + '][items][' + itemIndex + '][description]'"
+                                                       x-model="item.description"
+                                                       placeholder="Item description"
+                                                       class="w-full rounded border border-gray-200 bg-white px-2.5 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div x-show="!section.items || section.items.length === 0" class="p-4 text-center text-sm text-gray-400 border border-dashed border-gray-300 rounded-lg dark:border-gray-700">
+                                    No items yet. Click "Add Item" to add new items
+                                </div>
+                            </div>
+
+                            {{-- Section Content (for text type) --}}
+                            <div x-show="section.type === 'text'">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Text Content</label>
+                                <textarea :name="'sections[' + sectionIndex + '][content]'"
+                                          x-model="section.content"
+                                          rows="5"
+                                          placeholder="Enter the text content for this section..."
+                                          class="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90"></textarea>
+                            </div>
+
+                            {{-- Hidden fields --}}
+                            <input type="hidden" :name="'sections[' + sectionIndex + '][sort_order]'" :value="sectionIndex">
+                            <input type="hidden" :name="'sections[' + sectionIndex + '][is_active]'" value="1">
                         </div>
                     </template>
-                </div>
 
-                {{-- Benefits Section --}}
-                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 mb-6"
-                     x-data="{
-                         benefits: {{ json_encode(old('benefits', (is_array($service->benefits) && count($service->benefits) > 0) ? $service->benefits : [])) }},
-                         addBenefit() {
-                             this.benefits.push({ icon: '', title: '', description: '' });
-                         },
-                         confirmRemoveBenefit(index) {
-                             const self = this;
-                             Swal.fire({
-                                 title: 'Remove Benefit?',
-                                 text: 'Are you sure you want to remove this benefit from the database?',
-                                 icon: 'warning',
-                                 showCancelButton: true,
-                                 confirmButtonColor: '#dc2626',
-                                 cancelButtonColor: '#6b7280',
-                                 confirmButtonText: 'Yes, Remove',
-                                 cancelButtonText: 'Cancel'
-                             }).then((result) => {
-                                 if (result.isConfirmed) {
-                                     fetch('{{ route('admin.services.remove-benefit', $service) }}', {
-                                         method: 'DELETE',
-                                         headers: {
-                                             'Content-Type': 'application/json',
-                                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                             'Accept': 'application/json'
-                                         },
-                                         body: JSON.stringify({ index: index })
-                                     })
-                                     .then(response => response.json())
-                                     .then(data => {
-                                         if (data.success) {
-                                             self.benefits.splice(index, 1);
-                                             Swal.fire({
-                                                 title: 'Deleted!',
-                                                 text: data.message,
-                                                 icon: 'success',
-                                                 timer: 1500,
-                                                 showConfirmButton: false
-                                             });
-                                         } else {
-                                             Swal.fire('Error', data.message, 'error');
-                                         }
-                                     })
-                                     .catch(error => {
-                                         console.error('Error:', error);
-                                         Swal.fire('Error', 'Failed to remove benefit.', 'error');
-                                     });
-                                 }
-                             });
-                         },
-                         openIconPickerFor(index) {
-                             const self = this;
-                             window.openIconPicker(this.benefits[index].icon, function(icon) {
-                                 self.benefits[index].icon = icon;
-                             });
-                         }
-                     }">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-800 dark:text-white/90">Benefits</h3>
-                        <button type="button" @click="addBenefit()"
-                                class="inline-flex items-center gap-1 text-sm text-brand-500 hover:text-brand-600">
+                    <div x-show="sections.length === 0" class="p-8 text-center border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-700">
+                        <svg class="w-12 h-12 mx-auto mb-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <p class="text-gray-500 mb-3">No custom sections added yet</p>
+                        <button type="button" @click="addSection()"
+                                class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-brand-600 hover:text-brand-700">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 5v14M5 12h14"/>
                             </svg>
-                            Add Benefit
+                            Add New Section
                         </button>
                     </div>
-
-                    <template x-for="(benefit, index) in benefits" :key="index">
-                        <div class="mb-4 p-4 border border-gray-100 rounded-lg dark:border-gray-800">
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-sm font-medium text-gray-600 dark:text-gray-400" x-text="'Benefit ' + (index + 1)"></span>
-                                <button type="button" @click="confirmRemoveBenefit(index)"
-                                        class="text-red-500 hover:text-red-600">
-                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M18 6L6 18M6 6l12 12"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div>
-                                    <label class="block text-xs text-gray-500 mb-1">Icon</label>
-                                    <input type="hidden" :name="'benefits[' + index + '][icon]'" x-model="benefit.icon">
-                                    <button type="button"
-                                            @click="openIconPickerFor(index)"
-                                            class="w-full flex items-center gap-3 rounded-lg border border-gray-200 bg-transparent px-4 py-2.5 text-left text-gray-800 hover:border-brand-300 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:text-white/90 transition-colors">
-                                        <div class="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/20 flex items-center justify-center flex-shrink-0">
-                                            <i x-show="benefit.icon" :class="benefit.icon" class="text-lg text-brand-500"></i>
-                                            <svg x-show="!benefit.icon" class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <rect x="3" y="3" width="7" height="7"></rect>
-                                                <rect x="14" y="3" width="7" height="7"></rect>
-                                                <rect x="14" y="14" width="7" height="7"></rect>
-                                                <rect x="3" y="14" width="7" height="7"></rect>
-                                            </svg>
-                                        </div>
-                                        <span x-show="benefit.icon" x-text="benefit.icon" class="text-xs font-mono text-gray-500 truncate"></span>
-                                        <span x-show="!benefit.icon" class="text-gray-400 text-sm">Choose icon...</span>
-                                    </button>
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-gray-500 mb-1">Title</label>
-                                    <input type="text" :name="'benefits[' + index + '][title]'" x-model="benefit.title" placeholder="Benefit Title" class="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-white/90">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-gray-500 mb-1">Description</label>
-                                    <input type="text" :name="'benefits[' + index + '][description]'" x-model="benefit.description" placeholder="Description" class="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-white/90">
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-
-                {{-- Ideal For Section --}}
-                <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900"
-                     x-data="{
-                         idealFor: {{ json_encode(old('ideal_for', (is_array($service->ideal_for) && count($service->ideal_for) > 0) ? $service->ideal_for : [])) }},
-                         addIdealFor() {
-                             this.idealFor.push({ icon: 'fas fa-check-circle', title: '', description: '' });
-                         },
-                         confirmRemoveIdealFor(index) {
-                             const self = this;
-                             Swal.fire({
-                                 title: 'Remove Item?',
-                                 text: 'Are you sure you want to remove this item from the database?',
-                                 icon: 'warning',
-                                 showCancelButton: true,
-                                 confirmButtonColor: '#dc2626',
-                                 cancelButtonColor: '#6b7280',
-                                 confirmButtonText: 'Yes, Remove',
-                                 cancelButtonText: 'Cancel'
-                             }).then((result) => {
-                                 if (result.isConfirmed) {
-                                     fetch('{{ route('admin.services.remove-ideal-for', $service) }}', {
-                                         method: 'DELETE',
-                                         headers: {
-                                             'Content-Type': 'application/json',
-                                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                             'Accept': 'application/json'
-                                         },
-                                         body: JSON.stringify({ index: index })
-                                     })
-                                     .then(response => response.json())
-                                     .then(data => {
-                                         if (data.success) {
-                                             self.idealFor.splice(index, 1);
-                                             Swal.fire({
-                                                 title: 'Deleted!',
-                                                 text: data.message,
-                                                 icon: 'success',
-                                                 timer: 1500,
-                                                 showConfirmButton: false
-                                             });
-                                         } else {
-                                             Swal.fire('Error', data.message, 'error');
-                                         }
-                                     })
-                                     .catch(error => {
-                                         console.error('Error:', error);
-                                         Swal.fire('Error', 'Failed to remove item.', 'error');
-                                     });
-                                 }
-                             });
-                         },
-                         openIconPickerFor(index) {
-                             const self = this;
-                             window.openIconPicker(this.idealFor[index].icon, function(icon) {
-                                 self.idealFor[index].icon = icon;
-                             });
-                         }
-                     }">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-800 dark:text-white/90">Ideal For</h3>
-                        <button type="button" @click="addIdealFor()"
-                                class="inline-flex items-center gap-1 text-sm text-brand-500 hover:text-brand-600">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 5v14M5 12h14"/>
-                            </svg>
-                            Add Item
-                        </button>
-                    </div>
-
-                    <template x-for="(item, index) in idealFor" :key="index">
-                        <div class="mb-4 p-4 border border-gray-100 rounded-lg dark:border-gray-800">
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-sm font-medium text-gray-600 dark:text-gray-400" x-text="'Item ' + (index + 1)"></span>
-                                <button type="button" @click="confirmRemoveIdealFor(index)"
-                                        class="text-red-500 hover:text-red-600">
-                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M18 6L6 18M6 6l12 12"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <div>
-                                    <label class="block text-xs text-gray-500 mb-1">Icon</label>
-                                    <input type="hidden" :name="'ideal_for[' + index + '][icon]'" x-model="item.icon">
-                                    <button type="button"
-                                            @click="openIconPickerFor(index)"
-                                            class="w-full flex items-center gap-3 rounded-lg border border-gray-200 bg-transparent px-4 py-2.5 text-left text-gray-800 hover:border-brand-300 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:text-white/90 transition-colors">
-                                        <div class="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/20 flex items-center justify-center flex-shrink-0">
-                                            <i x-show="item.icon" :class="item.icon" class="text-lg text-brand-500"></i>
-                                            <svg x-show="!item.icon" class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <rect x="3" y="3" width="7" height="7"></rect>
-                                                <rect x="14" y="3" width="7" height="7"></rect>
-                                                <rect x="14" y="14" width="7" height="7"></rect>
-                                                <rect x="3" y="14" width="7" height="7"></rect>
-                                            </svg>
-                                        </div>
-                                        <span x-show="item.icon" x-text="item.icon" class="text-xs font-mono text-gray-500 truncate"></span>
-                                        <span x-show="!item.icon" class="text-gray-400 text-sm">Choose icon...</span>
-                                    </button>
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-gray-500 mb-1">Title</label>
-                                    <input type="text" :name="'ideal_for[' + index + '][title]'" x-model="item.title" placeholder="Target Audience" class="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-white/90">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-gray-500 mb-1">Description</label>
-                                    <input type="text" :name="'ideal_for[' + index + '][description]'" x-model="item.description" placeholder="Description" class="w-full rounded-lg border border-gray-200 bg-transparent px-3 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:outline-none dark:border-gray-800 dark:bg-gray-900 dark:text-white/90">
-                                </div>
-                            </div>
-                        </div>
-                    </template>
                 </div>
 
                 {{-- Quick Features Section --}}

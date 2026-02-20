@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    /* Custom Padding */
+    .py-2 {
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+        padding-left: .5rem;
+    }
+}

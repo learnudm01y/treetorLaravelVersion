@@ -70,6 +70,14 @@ class ServiceController extends Controller
             'meta_description' => 'nullable|string|max:300',
             'status' => 'required|in:draft,published,archived',
             'sort_order' => 'nullable|integer',
+            'sections' => 'nullable|array',
+            'sections.*.title' => 'required|string|max:255',
+            'sections.*.icon' => 'nullable|string|max:100',
+            'sections.*.type' => 'required|in:list,grid,text',
+            'sections.*.items' => 'nullable|array',
+            'sections.*.content' => 'nullable|string',
+            'sections.*.sort_order' => 'nullable|integer',
+            'sections.*.is_active' => 'nullable|boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
@@ -80,7 +88,18 @@ class ServiceController extends Controller
             $validated['featured_image'] = $path;
         }
 
-        Service::create($validated);
+        // Create service
+        $sections = $validated['sections'] ?? [];
+        unset($validated['sections']);
+
+        $service = Service::create($validated);
+
+        // Create sections
+        if (!empty($sections)) {
+            foreach ($sections as $sectionData) {
+                $service->sections()->create($sectionData);
+            }
+        }
 
         return redirect()->route('admin.services.index')
                          ->with('success', 'Service created successfully.');
@@ -127,6 +146,14 @@ class ServiceController extends Controller
             'meta_description' => 'nullable|string|max:300',
             'status' => 'required|in:draft,published,archived',
             'sort_order' => 'nullable|integer',
+            'sections' => 'nullable|array',
+            'sections.*.title' => 'required|string|max:255',
+            'sections.*.icon' => 'nullable|string|max:100',
+            'sections.*.type' => 'required|in:list,grid,text',
+            'sections.*.items' => 'nullable|array',
+            'sections.*.content' => 'nullable|string',
+            'sections.*.sort_order' => 'nullable|integer',
+            'sections.*.is_active' => 'nullable|boolean',
         ]);
 
         // Preserve existing arrays if not submitted (empty arrays mean user cleared them)
@@ -154,7 +181,20 @@ class ServiceController extends Controller
             $validated['featured_image'] = $path;
         }
 
+        // Handle sections
+        $sections = $validated['sections'] ?? [];
+        unset($validated['sections']);
+
         $service->update($validated);
+
+        // Delete existing sections and recreate them
+        $service->sections()->delete();
+
+        if (!empty($sections)) {
+            foreach ($sections as $sectionData) {
+                $service->sections()->create($sectionData);
+            }
+        }
 
         return redirect()->route('admin.services.index')
                          ->with('success', 'Service updated successfully.');

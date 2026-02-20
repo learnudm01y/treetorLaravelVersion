@@ -867,6 +867,65 @@
                         </div>
                     @endif
 
+                    {{-- Dynamic Sections --}}
+                    @if($service->sections && $service->sections->count() > 0)
+                        @foreach($service->sections->where('is_active', true)->sortBy('sort_order') as $section)
+                            <div class="service-detail-block">
+                                <h2 class="section-title">
+                                    <span class="section-title__icon"><i class="{{ $section->icon ?? 'fas fa-layer-group' }}"></i></span>
+                                    {{ $section->title }}
+                                </h2>
+
+                                @if($section->type === 'text')
+                                    {{-- Text Type Section --}}
+                                    <div class="service-detail-description">
+                                        {!! nl2br(e($section->content)) !!}
+                                    </div>
+                                @elseif($section->type === 'grid')
+                                    {{-- Grid Type Section --}}
+                                    @if($section->items && count($section->items) > 0)
+                                        <div class="benefits-grid">
+                                            @foreach($section->items as $item)
+                                                @if(!empty($item['title']))
+                                                    <div class="benefit-card">
+                                                        <div class="benefit-card__icon">
+                                                            <i class="{{ $item['icon'] ?? 'fas fa-check' }}"></i>
+                                                        </div>
+                                                        <h4 dir="auto">{{ $item['title'] }}</h4>
+                                                        @if(!empty($item['description']))
+                                                            <p dir="auto">{{ $item['description'] }}</p>
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                @else
+                                    {{-- List Type Section (default) --}}
+                                    @if($section->items && count($section->items) > 0)
+                                        <ul class="service-features-list">
+                                            @foreach($section->items as $item)
+                                                @if(!empty($item['title']))
+                                                    <li>
+                                                        <div class="feature-icon">
+                                                            <i class="{{ $item['icon'] ?? 'fas fa-check' }}"></i>
+                                                        </div>
+                                                        <div class="feature-content">
+                                                            <h4 dir="auto">{{ $item['title'] }}</h4>
+                                                            @if(!empty($item['description']))
+                                                                <p dir="auto">{{ $item['description'] }}</p>
+                                                            @endif
+                                                        </div>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                @endif
+                            </div>
+                        @endforeach
+                    @endif
+
                 </div>
 
                 <!-- Sidebar Column -->

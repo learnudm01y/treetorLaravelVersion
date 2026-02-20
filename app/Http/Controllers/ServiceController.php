@@ -24,7 +24,8 @@ class ServiceController extends Controller
      */
     public function show(string $slug)
     {
-        $service = Service::where('slug', $slug)
+        $service = Service::with('sections')
+            ->where('slug', $slug)
             ->published()
             ->firstOrFail();
 

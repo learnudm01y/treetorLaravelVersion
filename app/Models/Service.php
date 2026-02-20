@@ -73,6 +73,14 @@ class Service extends Model
     }
 
     /**
+     * Get the sections for the service.
+     */
+    public function sections()
+    {
+        return $this->hasMany(ServiceSection::class)->ordered();
+    }
+
+    /**
      * Get formatted price.
      */
     public function getFormattedPriceAttribute()
