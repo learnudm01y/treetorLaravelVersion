@@ -170,7 +170,11 @@
                              if (!this.sections[sectionIndex].items) {
                                  this.sections[sectionIndex].items = [];
                              }
-                             this.sections[sectionIndex].items.push({ icon: 'fas fa-check', title: '', description: '' });
+                             if (this.sections[sectionIndex].type === 'text') {
+                                 this.sections[sectionIndex].items.push({ icon: 'fas fa-clipboard-list', title: '', subtitle: '', content: '' });
+                             } else {
+                                 this.sections[sectionIndex].items.push({ icon: 'fas fa-check', title: '', description: '' });
+                             }
                          },
                          removeSectionItem(sectionIndex, itemIndex) {
                              this.sections[sectionIndex].items.splice(itemIndex, 1);
@@ -371,13 +375,77 @@
                             </div>
 
                             {{-- Section Content (for text type) --}}
-                            <div x-show="section.type === 'text'">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Text Content</label>
-                                <textarea :name="'sections[' + sectionIndex + '][content]'"
-                                          x-model="section.content"
-                                          rows="5"
-                                          placeholder="Enter the text content for this section..."
-                                          class="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-white/90"></textarea>
+                            <div x-show="section.type === 'text'" class="mb-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Text Items</label>
+                                    <button type="button" @click="addSectionItem(sectionIndex)"
+                                            class="inline-flex items-center gap-1 text-xs text-brand-500 hover:text-brand-600">
+                                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 5v14M5 12h14"/>
+                                        </svg>
+                                        Add Text Item
+                                    </button>
+                                </div>
+
+                                <template x-for="(item, itemIndex) in section.items" :key="'text-' + itemIndex">
+                                    <div class="mb-3 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-xs font-medium text-brand-600 dark:text-brand-400" x-text="'Text Item ' + (itemIndex + 1)"></span>
+                                            <button type="button" @click="removeSectionItem(sectionIndex, itemIndex)"
+                                                    class="text-red-500 hover:text-red-600 p-1">
+                                                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M18 6L6 18M6 6l12 12"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="flex flex-col gap-2">
+                                            {{-- Item Icon --}}
+                                            <div>
+                                                <label class="block text-xs text-gray-500 mb-1">Icon</label>
+                                                <input type="hidden" :name="'sections[' + sectionIndex + '][items][' + itemIndex + '][icon]'" x-model="item.icon">
+                                                <button type="button"
+                                                        @click="openIconPickerForItem(sectionIndex, itemIndex)"
+                                                        class="w-full flex items-center gap-2 rounded border border-gray-200 bg-white px-2.5 py-2 text-left hover:border-brand-300 dark:border-gray-700 dark:bg-gray-800">
+                                                    <div class="w-7 h-7 rounded bg-brand-50 dark:bg-brand-900/20 flex items-center justify-center flex-shrink-0">
+                                                        <i :class="item.icon" class="text-sm text-brand-500"></i>
+                                                    </div>
+                                                    <span x-text="item.icon" class="text-xs font-mono text-gray-500 truncate"></span>
+                                                </button>
+                                            </div>
+                                            {{-- Item Title --}}
+                                            <div>
+                                                <label class="block text-xs text-gray-500 mb-1">Title <span class="text-gray-400 font-normal">(numbered automatically when displayed)</span></label>
+                                                <input type="text"
+                                                       :name="'sections[' + sectionIndex + '][items][' + itemIndex + '][title]'"
+                                                       x-model="item.title"
+                                                       placeholder="e.g., Inventory Management SOPs"
+                                                       class="w-full rounded border border-gray-200 bg-white px-2.5 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                            </div>
+                                            {{-- Item Subtitle --}}
+                                            <div>
+                                                <label class="block text-xs text-gray-500 mb-1">Subtitle <span class="text-gray-400 font-normal">(shown below title)</span></label>
+                                                <input type="text"
+                                                       :name="'sections[' + sectionIndex + '][items][' + itemIndex + '][subtitle]'"
+                                                       x-model="item.subtitle"
+                                                       placeholder="e.g., Clear procedures that control how products are..."
+                                                       class="w-full rounded border border-gray-200 bg-white px-2.5 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white">
+                                            </div>
+                                            {{-- Item Content --}}
+                                            <div>
+                                                <label class="block text-xs text-gray-500 mb-1">Content <span class="text-gray-400 font-normal">(multi-line, line breaks preserved)</span></label>
+                                                <textarea :name="'sections[' + sectionIndex + '][items][' + itemIndex + '][content]'"
+                                                          x-model="item.content"
+                                                          rows="4"
+                                                          placeholder="Enter text content (each line break will be preserved)..."
+                                                          class="w-full rounded border border-gray-200 bg-white px-2.5 py-3 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white resize-y"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <div x-show="!section.items || section.items.length === 0" class="p-4 text-center text-sm text-gray-400 border border-dashed border-gray-300 rounded-lg dark:border-gray-700">
+                                    No text items yet. Click "Add Text Item" to add new items.
+                                </div>
                             </div>
 
                             {{-- Hidden fields --}}

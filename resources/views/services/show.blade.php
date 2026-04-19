@@ -214,6 +214,78 @@
         font-size: 16px;
     }
 
+    /* Text type section items */
+    .text-item-card {
+        background: #eef7f0;
+        border-radius: 14px;
+        padding: 24px 28px;
+        margin-bottom: 18px;
+    }
+
+    .text-item-card:last-child {
+        margin-bottom: 0;
+    }
+
+    .text-item-card__title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 17px;
+        font-weight: 700;
+        color: #0d5c47;
+        margin-bottom: 14px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #d0e8d8;
+    }
+
+    .text-item-card__title-icon {
+        width: 36px;
+        height: 36px;
+        background: #d4ecdb;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0d5c47;
+        font-size: 15px;
+        flex-shrink: 0;
+    }
+
+    .text-item-card__subtitle {
+        font-weight: 700;
+        color: #2c3e50;
+        font-size: 14px;
+        margin-bottom: 12px;
+        line-height: 1.5;
+    }
+
+    .text-item-card__lines {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .text-item-card__lines li {
+        color: #7a5c3a;
+        font-size: 13.5px;
+        line-height: 1.6;
+        padding: 2px 0 2px 18px;
+        position: relative;
+    }
+
+    .text-item-card__lines li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6px;
+        height: 6px;
+        background: #7a5c3a;
+        border-radius: 50%;
+        display: none;
+    }
+
     .service-detail-description p {
         margin-bottom: 15px;
     }
@@ -878,9 +950,36 @@
 
                                 @if($section->type === 'text')
                                     {{-- Text Type Section --}}
-                                    <div class="service-detail-description">
-                                        {!! nl2br(e($section->content)) !!}
-                                    </div>
+                                    @if($section->items && count($section->items) > 0)
+                                        @foreach($section->items as $textIndex => $item)
+                                            @if(!empty($item['title']) || !empty($item['content']))
+                                                <div class="text-item-card">
+                                                    <div class="text-item-card__title">
+                                                        <span class="text-item-card__title-icon"><i class="{{ $item['icon'] ?? 'fas fa-clipboard-list' }}"></i></span>
+                                                        <span dir="auto">{{ ($textIndex + 1) . '.  ' . ($item['title'] ?? '') }}</span>
+                                                    </div>
+                                                    @if(!empty($item['subtitle']))
+                                                        <p class="text-item-card__subtitle" dir="auto">{{ $item['subtitle'] }}</p>
+                                                    @endif
+                                                    @if(!empty($item['content']))
+                                                        @php
+                                                            $lines = array_filter(explode("\n", $item['content']), fn($l) => trim($l) !== '');
+                                                        @endphp
+                                                        <ul class="text-item-card__lines" dir="auto">
+                                                            @foreach($lines as $line)
+                                                                <li>{{ trim($line) }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @elseif($section->content)
+                                        {{-- Backward compatibility: old-style plain text content --}}
+                                        <div class="service-detail-description">
+                                            {!! nl2br(e($section->content)) !!}
+                                        </div>
+                                    @endif
                                 @elseif($section->type === 'grid')
                                     {{-- Grid Type Section --}}
                                     @if($section->items && count($section->items) > 0)
