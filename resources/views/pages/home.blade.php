@@ -98,7 +98,7 @@
             <div class="advantages-item">
                 <div class="advantages-item__icon">
                     <span class="icon-bg"></span>
-                    <i class="fas fa-award" style="color: #90EE90 !important;"></i>
+                    <i class="fas fa-award" style="color: #1a6e2e !important;"></i>
                 </div>
                 <h4>Equipment, Product & Procurement Optimization</h4>
                 <p>Goal: Premium quality at optimized cost.</p>
@@ -106,7 +106,7 @@
             <div class="advantages-item">
                 <div class="advantages-item__icon">
                     <span class="icon-bg"></span>
-                    <i class="fas fa-star" style="color: #90EE90 !important;"></i>
+                    <i class="fas fa-star" style="color: #1a6e2e !important;"></i>
                 </div>
                 <h4>Service Menu & Pricing Strategy</h4>
                 <p>Goal: Attract and retain clients while maximizing profits.</p>
@@ -114,7 +114,7 @@
             <div class="advantages-item">
                 <div class="advantages-item__icon">
                     <span class="icon-bg"></span>
-                    <i class="far fa-heart" style="color: #90EE90 !important;"></i>
+                    <i class="far fa-heart" style="color: #1a6e2e !important;"></i>
                 </div>
                 <h4>Branding & Interior Advisory</h4>
                 <p>Goal: Build a brand clients love and a space that works.</p>
@@ -122,7 +122,7 @@
             <div class="advantages-item">
                 <div class="advantages-item__icon">
                     <span class="icon-bg"></span>
-                    <i class="fas fa-seedling" style="color: #90EE90 !important;"></i>
+                    <i class="fas fa-seedling" style="color: #1a6e2e !important;"></i>
                 </div>
                 <h4>Financial Oversight & Budget Optimization</h4>
                 <p>Goal: Strengthen financial performance.</p>
@@ -130,7 +130,7 @@
             <div class="advantages-item">
                 <div class="advantages-item__icon">
                     <span class="icon-bg"></span>
-                    <i class="far fa-user" style="color: #90EE90 !important;"></i>
+                    <i class="far fa-user" style="color: #1a6e2e !important;"></i>
                 </div>
                 <h4>HR Support & Talent Acquisition</h4>
                 <p>Goal: Hire, train, and retain the right team.</p>
@@ -138,7 +138,7 @@
             <div class="advantages-item">
                 <div class="advantages-item__icon">
                     <span class="icon-bg"></span>
-                    <i class="fas fa-phone-volume" style="color: #90EE90 !important;"></i>
+                    <i class="fas fa-phone-volume" style="color: #1a6e2e !important;"></i>
                 </div>
                 <h4>Staff Training & Development</h4>
                 <p>Goal: Equip your team with skills to deliver excellence.</p>
@@ -146,7 +146,7 @@
             <div class="advantages-item">
                 <div class="advantages-item__icon">
                     <span class="icon-bg"></span>
-                    <i class="fas fa-clipboard" style="color: #90EE90 !important;"></i>
+                    <i class="fas fa-clipboard" style="color: #1a6e2e !important;"></i>
                 </div>
                 <h4>Operational Reporting & Team Goal Alignment</h4>
                 <p>Goal: Drive accountability and continuous growth.</p>
@@ -154,7 +154,7 @@
             <div class="advantages-item">
                 <div class="advantages-item__icon">
                     <span class="icon-bg"></span>
-                    <i class="fas fa-leaf" style="color: #90EE90 !important;"></i>
+                    <i class="fas fa-leaf" style="color: #1a6e2e !important;"></i>
                 </div>
                 <h4>Business Structuring & Systemization</h4>
                 <p>Goal: Build a salon that runs smoothly — with or without you.</p>
